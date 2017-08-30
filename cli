@@ -1,0 +1,142 @@
+#!/usr/bin/env php
+<?php
+date_default_timezone_set("Europe/Moscow");
+
+include_once __DIR__ . '/vendor/autoload.php';
+
+class Cli
+{
+    /**
+     * @var int exit code - all went well
+     */
+    const EXIT_CODE_OK = 0;
+
+    /**
+     * @var int exit code - incorrect CLI arguments list
+     */
+    const EXIT_CODE_ARGS_LIST = 10;
+
+    /**
+     * @var int exit code - some kind of file/DB access error
+     */
+    const EXIT_CODE_ACCESS_ERROR = 11;
+
+    const ACTION_TEMPLATE = '';
+
+    /**
+     * @var array copy of system's argv
+     */
+    private $args;
+
+    /**
+     * Cli constructor.
+     *
+     * @param $args
+     */
+    function __construct($args)
+    {
+        $this->args = $args;
+    }
+
+    /**
+     * Main function - class's entry point
+     *
+     * @return int
+     */
+    public function run()
+    {
+        if (count($this->args) <= 1) {
+            $this->help();
+            return static::EXIT_CODE_ARGS_LIST;
+        }
+
+        switch ($this->args[1]) {
+            case 'generate':
+                return $this->runGenerate();
+                break;
+
+            case 'help':
+            case '--help':
+            default:
+                $this->help();
+                return static::EXIT_CODE_OK;
+        }
+    }
+
+    /**
+     * Display usage/help screen
+     */
+    private function help()
+    {
+        echo PHP_EOL;
+        echo "syntaxis: php cli <command> [<args>]", PHP_EOL;
+        echo PHP_EOL;
+        echo "Commands: ", PHP_EOL;
+        echo "php cli --help                             -->   Displays the help menu.",          PHP_EOL;
+        echo "php cli generate                           -->   Generate endpoints by contracts.", PHP_EOL;
+        echo "php cli runTests <args>                    -->   Run test suite.",                  PHP_EOL;
+        echo PHP_EOL;
+    }
+
+    /**
+     * @return int
+     */
+    private function runGenerate()
+    {
+        $path          = __DIR__ . '/app/src/Actions/Api';
+        $templatePath  = $path . '/.template';
+        $contractsPath = __DIR__ . '/app/contracts';
+
+        if (!is_writeable($path)) {
+            echo 'The directory ' . $path . ' is not writable'.PHP_EOL;
+            return static::EXIT_CODE_ACCESS_ERROR;
+        }
+
+        if (false === file_exists($templatePath)) {
+            echo 'The template file ' . $templatePath . ' not found'.PHP_EOL;
+            return static::EXIT_CODE_ACCESS_ERROR;
+        };
+
+        // Scan
+        $versions = array_diff(scandir($contractsPath), ['..', '.']);
+        foreach ($versions as $version) {
+            $extensions = array_diff(scandir($contractsPath.'//'.$version), ['..', '.']);
+            $className  = strtoupper($version);
+            $baseName   = $className . '.php';
+
+            $methods = [];
+            foreach ($extensions as $extension) {
+                $contracts = array_diff(scandir($contractsPath.'//'.$version.'//'.$extension), ['..', '.']);
+
+                foreach ($contracts as $contract) {
+                    $data = file_get_contents($contractsPath . '//' . $version . '//' . $extension . '//' . $contract);
+                    $data = json_decode($data, true);
+
+                    $methodName = 'App\Handlers\\'.$className.'\\'.ucfirst($extension).'\\'.ucfirst(str_replace(".json", "", $contract));
+
+                    $methods[$methodName] = [
+                        'params'   => $data['success']['request']['params'],
+                        'needAuth' => $data['needAuth'],
+                    ];
+                }
+            }
+
+            ob_start();
+            include($templatePath);
+            $contents = ob_get_clean();
+
+            if (false === file_put_contents($path . '/' . $baseName, $contents)) {
+                echo 'The file ' . $baseName . ' could not be written to'.PHP_EOL;
+                return static::EXIT_CODE_ACCESS_ERROR;
+            };
+        }
+
+        echo "Generate completed".PHP_EOL;
+        return static::EXIT_CODE_OK;
+    }
+}
+
+$cli = new Cli($argv);
+exit ($cli->run());
+
+

@@ -19,7 +19,6 @@ abstract class BaseAction
         // TODO: проверить RPC запрос
 
         $method = explode('.', $params['method']);
-
         $method = 'App\Handlers\\'.static::who().'\\'.ucfirst($method[0]).'\\'.ucfirst($method[1]);
 
         if (!isset(static::$methods[$method])) {
@@ -32,11 +31,11 @@ abstract class BaseAction
             // TODO: если необходима авторизация - проверить авторизованность
         }
 
-        // TODO: вызвать метод
+        $obj = new $method;
+        $result = $obj($params['params']);
 
-        // TODO: вернуть результат
-
-        return $response;
+        // TODO: отрендерить в JSON-RPC 2.0
+        return $response->withJson($result, 200);
     }
 
     abstract static function who();

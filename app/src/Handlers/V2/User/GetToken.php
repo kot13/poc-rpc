@@ -1,5 +1,5 @@
 <?php
-namespace App\Handlers\V1\User;
+namespace App\Handlers\V2\User;
 
 class GetToken
 {

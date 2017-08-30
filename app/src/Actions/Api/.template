@@ -1,0 +1,28 @@
+<?= "<?php";?>
+
+/**
+ * This file is generated NAH!
+ */
+namespace App\Actions\Api;
+
+final class <?= $className ?> extends BaseAction
+{
+    protected static $methods = [
+<?php
+foreach($methods as $name => $method) {
+    echo "\t\t'".$name."' => [".PHP_EOL;
+    echo "\t\t\t'params' => [".PHP_EOL;
+    foreach($method['params'] as $param => $value) {
+        echo "\t\t\t\t'".$param."' => '".$value."',".PHP_EOL;
+    }
+    echo "\t\t\t],".PHP_EOL;
+    echo "\t\t\t'needAuth' => ".($method['needAuth'] ? 'true,' : 'false,').PHP_EOL;
+    echo "\t\t],".PHP_EOL;
+};
+?>
+    ];
+
+    public static function who() {
+        return '<?= $className ?>';
+    }
+}

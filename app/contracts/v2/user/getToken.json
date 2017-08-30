@@ -6,14 +6,12 @@
   "success": {
     "request": {
       "params": {
-        "username": "required|string|email",
-        "password": "required|string",
-        "clientId": "required|string"
+        "phone": "required|string|phone",
+        "code": "required|string"
       },
       "example": {
-        "username": "kot_tdf@mail.ru",
-        "password": "qwerty1234",
-        "clientId": "am-mobile-app"
+        "phone": "79046473638",
+        "code": "1234"
       }
     },
     "response": {
