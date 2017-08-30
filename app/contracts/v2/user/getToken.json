@@ -1,0 +1,34 @@
+{
+  "method": "getToken",
+  "title": "Получение токена",
+  "description": "Метод для получения токена",
+  "needAuth": false,
+  "success": {
+    "request": {
+      "params": {
+        "username": "required|string|email",
+        "password": "required|string",
+        "clientId": "required|string"
+      },
+      "example": {
+        "username": "kot_tdf@mail.ru",
+        "password": "qwerty1234",
+        "clientId": "am-mobile-app"
+      }
+    },
+    "response": {
+      "params": {
+        "access_token": "string",
+        "expires_in": "integer",
+        "token_type": "string",
+        "refresh_token": "string"
+      },
+      "example": {
+        "access_token": "ad29cf10a40ec04dae0e4e5f4cab2772df1b4734",
+        "expires_in": 3600,
+        "token_type": "Bearer",
+        "refresh_token": "cc330ca2a44effb705f67152dbd67077dba3849e"
+      }
+    }
+  }
+}
