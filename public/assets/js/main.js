@@ -1,9 +1,4 @@
 $(document).ready(function() {
-	
-	/* ===== Affix Sidebar ===== */
-	/* Ref: http://getbootstrap.com/javascript/#affix-examples */
-
-    	
 	$('#doc-menu').affix({
         offset: {
             top: ($('#header').outerHeight(true) + $('#doc-header').outerHeight(true)) + 45,
@@ -27,21 +22,4 @@ $(document).ready(function() {
 		$('body').scrollTo(target, 800, {offset: 0, 'axis':'y'});
 		
 	});
-	
-    
-    /* ======= jQuery Responsive equal heights plugin ======= */
-    /* Ref: https://github.com/liabru/jquery-match-height */
-    
-     $('#cards-wrapper .item-inner').matchHeight();
-     $('#showcase .card').matchHeight();
-     
-    /* Bootstrap lightbox */
-    /* Ref: http://ashleydw.github.io/lightbox/ */
-
-    $(document).delegate('*[data-toggle="lightbox"]', 'click', function(e) {
-        e.preventDefault();
-        $(this).ekkoLightbox();
-    });    
-
-
 });

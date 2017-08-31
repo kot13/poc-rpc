@@ -1,122 +1,114 @@
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="ru"> <!--<![endif]-->
+<!--[if IE 8]> <html lang="ru" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="ru" class="ie9"> <![endif]-->
+<!--[if !IE]><!--><html lang="ru"> <!--<![endif]-->
 <head>
     <title>Документация</title>
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
     <link rel="shortcut icon" href="{{ base_url() }}/favicon.ico">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-    <!-- Global CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" href="{{ base_url() }}/assets/plugins/bootstrap/css/bootstrap.min.css">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="{{ base_url() }}/assets/plugins/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="{{ base_url() }}/assets/plugins/prism/prism.css">
-    <link rel="stylesheet" href="{{ base_url() }}/assets/plugins/lightbox/dist/ekko-lightbox.min.css">
-    <link rel="stylesheet" href="{{ base_url() }}/assets/plugins/elegant_font/css/style.css">
-
-    <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="{{ base_url() }}/assets/css/styles.css">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
-
 <body class="body-pink">
-<div class="page-wrapper">
-    <header id="header" class="header">
-        <div class="container">
-            <div class="branding">
-                <h1 class="logo">
-                    <a href="/">
-                        <span aria-hidden="true" class="icon_documents_alt icon"></span>
-                        <span class="text-highlight">AM.RU</span><span class="text-bold">Docs</span>
-                    </a>
-                </h1>
+    <div class="page-wrapper">
+        <header id="header" class="header">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <a href="/">
+                            <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                            <span class="text-highlight">AM.RU</span><span class="text-bold">Docs</span>
+                        </a>
+                    </h1>
+                </div>
             </div>
-            <ol class="breadcrumb">
-                <li><a href="/">Главная</a></li>
-            </ol>
-        </div>
-    </header>
+        </header>
 
-    <div class="doc-wrapper">
-        <div class="container">
-            <div id="doc-header" class="doc-header text-center">
-                <h1 class="doc-title"><span aria-hidden="true" class="icon icon_puzzle_alt"></span> JSON-RPC API version 1</h1>
-                <div class="meta"><i class="fa fa-clock-o"></i> Last updated: Jan 25th, 2016</div>
-            </div>
+        <div class="doc-wrapper">
+            <div class="container">
+                <div class="doc-body">
+                    <div class="doc-content">
+                        <div class="content-inner">
+                            <section id="start" class="doc-section">
+                                <h2 class="section-title">Начало</h2>
+                                <div class="section-block">
+                                    <p>API реализовано в соответствии с протоколом JSON-RPC 2.0</p>
+                                    <p>Подробнее о протоколе <a href="http://www.jsonrpc.org/" target="_blank">JSON-RPC 2.0</a></p>
+                                    <p>Часть методов API доступна только авторизованным пользователям. Для вызова этих методов необходимо отправлять HTTP заголовок:</p>
+                                    <pre><code class="language-markup">Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+                                    <p>В котором передаётся токен.</p>
+                                </div>
+                                <div class="section-block">
+                                    <h3 class="block-title">Формат ответ</h3>
+                                    <p>В общем виде успешный ответ API выглядит следующим образом:</p>
+                                    <pre><code class="language-json">{
+  "jsonrpc": "2.0",
+  "result": {}
+  "id": 1
+}</code></pre>
+                                    <p>В общем виде ответ API с ошибкой выглядит так:</p>
+                                    <pre><code class="language-json">{
+  "jsonrpc": "2.0",
+  "error": {
+    "code": -32601,
+    "message": "Method not found"
+  },
+  "id": 1
+}</code></pre>
+                                </div>
+                            </section>
+                            <section id="user" class="doc-section">
+                                <h2 class="section-title">User</h2>
+                                <div id="UserGetToken" class="section-block">
+                                    <h3 class="block-title">GetToken</h3>
+                                    <p>
 
-            <div class="doc-body">
-                <div class="doc-content">
-                    <div class="content-inner">
-                        <section id="start" class="doc-section">
-                            <h2 class="section-title">Начало</h2>
-                            <div class="section-block">
-                                <p>
-
-                                </p>
-                            </div>
-                            <div class="section-block">
-                                <p>
-
-                                </p>
-                            </div>
-                        </section>
-                        <section id="user" class="doc-section">
-                            <h2 class="section-title">User</h2>
-                            <div id="UserGetToken" class="section-block">
-                                <h3 class="block-title">GetToken</h3>
-                                <p>
-
-                                </p>
-                            </div>
-                        </section>
+                                    </p>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="doc-sidebar">
+                        <nav id="doc-nav">
+                            <ul id="doc-menu" class="nav doc-menu hidden-xs" data-spy="affix">
+                                <li><a class="scrollto" href="#start">Начало</a></li>
+                                <li>
+                                    <a class="scrollto" href="#user">User</a>
+                                    <ul class="nav doc-sub-menu">
+                                        <li><a class="scrollto" href="#UserGetToken">GetToken</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
-                <div class="doc-sidebar">
-                    <nav id="doc-nav">
-                        <ul id="doc-menu" class="nav doc-menu hidden-xs" data-spy="affix">
-                            <li><a class="scrollto" href="#start">Начало</a></li>
-                            <li>
-                                <a class="scrollto" href="#user">User</a>
-                                <ul class="nav doc-sub-menu">
-                                    <li><a class="scrollto" href="#UserGetToken">GetToken</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
             </div>
         </div>
     </div>
-</div>
 
-<footer id="footer" class="footer text-center">
-    <div class="container">
-        <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out other license options via our website: themes.3rdwavemedia.com */-->
-        <small class="copyright">Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers</small>
+    <footer id="footer" class="footer text-center">
+        <div class="container">
+            <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out other license options via our website: themes.3rdwavemedia.com */-->
+            <small class="copyright">Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers</small>
+        </div>
+    </footer>
 
-    </div>
-</footer>
-
-<script type="text/javascript" src="{{ base_url() }}/assets/plugins/jquery-1.12.3.min.js"></script>
-<script type="text/javascript" src="{{ base_url() }}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="{{ base_url() }}/assets/plugins/prism/prism.js"></script>
-<script type="text/javascript" src="{{ base_url() }}/assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-<script type="text/javascript" src="{{ base_url() }}/assets/plugins/lightbox/dist/ekko-lightbox.min.js"></script>
-<script type="text/javascript" src="{{ base_url() }}/assets/plugins/jquery-match-height/jquery.matchHeight-min.js"></script>
-<script type="text/javascript" src="{{ base_url() }}/assets/js/main.js"></script>
-
+    <script type="text/javascript" src="{{ base_url() }}/assets/plugins/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/assets/plugins/prism/prism.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/assets/js/main.js"></script>
 </body>
 </html>
 
