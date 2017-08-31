@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var jsonEditors = {};
+
 	$('#doc-menu').affix({
         offset: {
             top: ($('#header').outerHeight(true) + $('#doc-header').outerHeight(true)) + 45,
@@ -22,4 +24,19 @@ $(document).ready(function() {
 		$('body').scrollTo(target, 800, {offset: 0, 'axis':'y'});
 		
 	});
+
+    $('.jsoneditor').each(function(){
+        var container = document.getElementById($(this).attr('id'));
+        var key = $(this).data('jsoneditor-key');
+        var json = $(this).text();
+
+        $(this).text('');
+
+        var options = {
+            modes: ['text'],
+            mode: 'text',
+            search: false
+        };
+        jsonEditors[key] = new JSONEditor(container, options, JSON.parse(json));
+    });
 });

@@ -1,5 +1,11 @@
 # Proof of concept RPC-API
 
+## Install
+```
+$ composer install
+$ php cli generate
+```
+
 ## How to use
 
 1. Create new contract in /app/contracts
@@ -13,4 +19,5 @@ $ php cli generate
 ## Run
 ```
 $ php -S 127.0.0.1:8888 -t ./public >/dev/null 2>&1 &
+$ open 127.0.0.1:8888
 ```

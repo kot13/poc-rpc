@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" href="{{ base_url() }}/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ base_url() }}/assets/plugins/prism/prism.css">
+    <link rel="stylesheet" href="{{ base_url() }}/assets/plugins/jsoneditor/jsoneditor.min.css">
     <link id="theme-style" rel="stylesheet" href="{{ base_url() }}/assets/css/styles.css">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -45,9 +46,54 @@
                                 <div class="section-block">
                                     <p>API реализовано в соответствии с протоколом JSON-RPC 2.0</p>
                                     <p>Подробнее о протоколе <a href="http://www.jsonrpc.org/" target="_blank">JSON-RPC 2.0</a></p>
-                                    <p>Часть методов API доступна только авторизованным пользователям. Для вызова этих методов необходимо отправлять HTTP заголовок:</p>
-                                    <pre><code class="language-markup">Authorization: Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
-                                    <p>В котором передаётся токен.</p>
+                                    <p>В блоке HEADER каждого запроса обязательно должны быть отправлены следующие HTTP заголовки:</p>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Название</th>
+                                                    <th>Тип</th>
+                                                    <th>Описание</th>
+                                                    <th>Пример</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>X-API-KEY</td>
+                                                    <td>String</td>
+                                                    <td>Ключ клиента</td>
+                                                    <td>blizzard-entertainment</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>X-API-CLIENT</td>
+                                                    <td>String</td>
+                                                    <td>Тип клиента</td>
+                                                    <td>desktop_site</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <p>Часть методов API доступна только авторизованным пользователям.<br/>Для вызова этих методов необходимо отправлять HTTP заголовок:</p>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Название</th>
+                                                <th>Тип</th>
+                                                <th>Описание</th>
+                                                <th>Пример</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>Authorization</td>
+                                                <td>String</td>
+                                                <td>Access token</td>
+                                                <td>Bearer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div class="section-block">
                                     <h3 class="block-title">Формат ответ</h3>
@@ -68,27 +114,70 @@
 }</code></pre>
                                 </div>
                             </section>
-                            <section id="user" class="doc-section">
-                                <h2 class="section-title">User</h2>
-                                <div id="UserGetToken" class="section-block">
-                                    <h3 class="block-title">GetToken</h3>
-                                    <p>
-
-                                    </p>
-                                </div>
-                            </section>
+                            {% for extension, methods in v1 %}
+                                <section id="{{ extension | raw }}" class="doc-section">
+                                    <h2 class="section-title">{{ extension | raw }}</h2>
+                                    {% for name, method  in methods %}
+                                        <div id="{{ extension | raw }}{{ name | raw }}" class="section-block">
+                                            <h3 class="block-title">{{ name | raw }} - {{ method.title | raw }}</h3>
+                                            <p>{{ method.description | raw }}</p>
+                                            <h4>Параметры</h4>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Название</th>
+                                                        <th>Тип</th>
+                                                        <th>Описание</th>
+                                                        <th>Пример</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>X-API-KEY</td>
+                                                        <td>String</td>
+                                                        <td>Ключ клиента</td>
+                                                        <td>blizzard-entertainment</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>X-API-CLIENT</td>
+                                                        <td>String</td>
+                                                        <td>Тип клиента</td>
+                                                        <td>desktop_site</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <h4>Пример запроса:</h4>
+                                            <pre><code class="language-json"></code></pre>
+                                            <h4>Пример ответа:</h4>
+                                            <pre><code class="language-json"></code></pre>
+                                            <h4>Отправить запрос:</h4>
+                                            <div id="jsoneditor-{{ extension | raw }}{{ name | raw }}" class="jsoneditor" data-jsoneditor-key="{{ extension | raw }}{{ name | raw }}">
+                                                {{ method.success.request.example | raw }}
+                                            </div>
+                                            <p></p>
+                                            <a href="#" class="btn btn-cta btn-pink" id="send">Отправить</a>
+                                        </div>
+                                    {% endfor %}
+                                </section>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="doc-sidebar">
                         <nav id="doc-nav">
                             <ul id="doc-menu" class="nav doc-menu hidden-xs" data-spy="affix">
                                 <li><a class="scrollto" href="#start">Начало</a></li>
-                                <li>
-                                    <a class="scrollto" href="#user">User</a>
-                                    <ul class="nav doc-sub-menu">
-                                        <li><a class="scrollto" href="#UserGetToken">GetToken</a></li>
-                                    </ul>
-                                </li>
+                                {% for extension, methods in v1 %}
+                                    <li>
+                                        <a class="scrollto" href="#{{ extension | raw }}">{{ extension | raw }}</a>
+                                        <ul class="nav doc-sub-menu">
+                                            {% for name, method  in methods %}
+                                            <li><a class="scrollto" href="#{{ extension | raw }}{{ name | raw }}">{{ name | raw }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </nav>
                     </div>
@@ -108,6 +197,7 @@
     <script type="text/javascript" src="{{ base_url() }}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ base_url() }}/assets/plugins/prism/prism.js"></script>
     <script type="text/javascript" src="{{ base_url() }}/assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/assets/plugins/jsoneditor/jsoneditor.min.js"></script>
     <script type="text/javascript" src="{{ base_url() }}/assets/js/main.js"></script>
 </body>
 </html>
