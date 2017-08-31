@@ -3,6 +3,7 @@
   "title": "Получение токена",
   "description": "Метод для получения токена",
   "needAuth": false,
+  "needCache": false,
   "success": {
     "request": {
       "params": {
@@ -28,5 +29,33 @@
         "refresh_token": "cc330ca2a44effb705f67152dbd67077dba3849e"
       }
     }
-  }
+  },
+  "testSuites": [
+    {
+      "request": {
+        "phone": "79046473638",
+        "code": "1234"
+      },
+      "response": {
+        "result": {
+          "access_token": "ad29cf10a40ec04dae0e4e5f4cab2772df1b4734",
+          "expires_in": 3600,
+          "token_type": "Bearer",
+          "refresh_token": "cc330ca2a44effb705f67152dbd67077dba3849e"
+        }
+      }
+    },
+    {
+      "request": {
+        "phone": "asdasdasd",
+        "code": "1234"
+      },
+      "response": {
+        "error": {
+          "code": -32600,
+          "message": "Invalid Request"
+        }
+      }
+    }
+  ]
 }

@@ -3,6 +3,7 @@
   "title": "Получение токена",
   "description": "Метод для получения токена",
   "needAuth": false,
+  "needCache": false,
   "success": {
     "request": {
       "params": {
@@ -30,5 +31,18 @@
         "refresh_token": "cc330ca2a44effb705f67152dbd67077dba3849e"
       }
     }
-  }
+  },
+  "testSuites": [
+    {
+      "request": {
+        "username": "qqqqqqq",
+        "password": "qqqqqqq",
+        "clientId": "am-mobile-app"
+      },
+      "response": {
+        "error": "invalid_grant",
+        "error_description": "Invalid username and password combination"
+      }
+    }
+  ]
 }
