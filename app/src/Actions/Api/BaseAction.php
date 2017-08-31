@@ -31,6 +31,8 @@ abstract class BaseAction
             // TODO: если необходима авторизация - проверить авторизованность
         }
 
+        //TODO: если указана стратегия кеширования, то применить
+
         $obj = new $method;
         $result = $obj($params['params']);
 
