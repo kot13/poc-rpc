@@ -26,12 +26,22 @@
         <header id="header" class="header">
             <div class="container">
                 <div class="branding">
-                    <h1 class="logo">
+                    <h1 class="logo pull-left">
                         <a href="/">
                             <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                             <span class="text-highlight">AM.RU</span><span class="text-bold">Docs</span>
                         </a>
                     </h1>
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-pink dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Версия {{ currentVersion | raw }} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            {% for version in otherVersions %}
+                                <li><a href="/?version={{ version | raw }}">Версия {{ version | raw }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </header>
@@ -114,7 +124,7 @@
 }</code></pre>
                                 </div>
                             </section>
-                            {% for extension, methods in v1 %}
+                            {% for extension, methods in docs %}
                                 <section id="{{ extension | raw }}" class="doc-section">
                                     <h2 class="section-title">{{ extension | raw }}</h2>
                                     {% for name, method  in methods %}
@@ -149,9 +159,9 @@
                                                 </table>
                                             </div>
                                             <h4>Пример запроса:</h4>
-                                            <pre><code class="language-json"></code></pre>
+                                            <pre><code class="language-json">{{ method.success.request.example | raw }}</code></pre>
                                             <h4>Пример ответа:</h4>
-                                            <pre><code class="language-json"></code></pre>
+                                            <pre><code class="language-json">{{ method.success.response.example | raw }}</code></pre>
                                             <h4>Отправить запрос:</h4>
                                             <div id="jsoneditor-{{ extension | raw }}{{ name | raw }}" class="jsoneditor" data-jsoneditor-key="{{ extension | raw }}{{ name | raw }}">
                                                 {{ method.success.request.example | raw }}
@@ -168,7 +178,7 @@
                         <nav id="doc-nav">
                             <ul id="doc-menu" class="nav doc-menu hidden-xs" data-spy="affix">
                                 <li><a class="scrollto" href="#start">Начало</a></li>
-                                {% for extension, methods in v1 %}
+                                {% for extension, methods in docs %}
                                     <li>
                                         <a class="scrollto" href="#{{ extension | raw }}">{{ extension | raw }}</a>
                                         <ul class="nav doc-sub-menu">

@@ -21,9 +21,10 @@ final class HomeAction
 
     public function __invoke(Request $request, Response $response, $args)
     {
-        $methods = [];
-
-        $versions = array_diff(scandir(self::CONTRACTS_PATH), ['..', '.']);
+        $methods        = [];
+        $versions       = array_diff(scandir(self::CONTRACTS_PATH), ['..', '.']);
+        $default        = current($versions);
+        $currentVersion = $request->getParam('version', $default);
         foreach ($versions as $version) {
             $extensions = array_diff(scandir(self::CONTRACTS_PATH . '//' . $version), ['..', '.']);
 
@@ -34,19 +35,38 @@ final class HomeAction
                     $data = file_get_contents(self::CONTRACTS_PATH . '//' . $version . '//' . $extension . '//' . $contract);
                     $data = json_decode($data, true);
 
-                    $methods[$version][ucfirst($extension)][ucfirst(str_replace(".json", "", $contract))] = $data;
+                    $extension = ucfirst($extension);
+                    $contract  = ucfirst(str_replace(".json", "", $contract));
 
-                    $example = $methods[$version][ucfirst($extension)][ucfirst(str_replace(".json", "", $contract))]['success']['request']['example'];
-                    $example = json_encode($example);
+                    $methods[$version][$extension][$contract] = $data;
 
-                    $methods[$version][ucfirst($extension)][ucfirst(str_replace(".json", "", $contract))]['success']['request']['example'] = $example;
+                    $ReqEx = $methods[$version][$extension][$contract]['success']['request']['example'];
+                    $ReqEx = [
+                        'jsonrpc' => '2.0',
+                        'method'  => strtolower($extension).'.'.strtolower($contract),
+                        'params'  => $ReqEx,
+                        'id'      => 1,
+                    ];
+                    $ReqEx = json_encode($ReqEx);
+
+                    $ResEx = $methods[$version][$extension][$contract]['success']['response']['example'];
+                    $ResEx = [
+                        'jsonrpc' => '2.0',
+                        'result'  => $ResEx,
+                        'id'      => 1,
+                    ];
+                    $ResEx = json_encode($ResEx);
+
+                    $methods[$version][$extension][$contract]['success']['request']['example'] = $ReqEx;
+                    $methods[$version][$extension][$contract]['success']['response']['example'] = $ResEx;
                 }
             }
         }
 
         $this->view->render($response, 'index.twig', [
-            'v1' => $methods['v1'],
-            'v2' => $methods['v2'],
+            'docs'           => $methods[$currentVersion],
+            'currentVersion' => $currentVersion,
+            'otherVersions'  => array_diff($versions, [$currentVersion]),
         ]);
 
         return $response;
