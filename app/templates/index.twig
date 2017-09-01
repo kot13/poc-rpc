@@ -131,7 +131,8 @@
                                         <div id="{{ extension | raw }}{{ name | raw }}" class="section-block">
                                             <h3 class="block-title">{{ name | raw }} - {{ method.title | raw }}</h3>
                                             <p>{{ method.description | raw }}</p>
-                                            <h4>Параметры</h4>
+
+                                            <h4>Параметры запроса:</h4>
                                             <div class="table-responsive">
                                                 <table class="table table-striped">
                                                     <thead>
@@ -139,32 +140,55 @@
                                                         <th>Название</th>
                                                         <th>Тип</th>
                                                         <th>Описание</th>
-                                                        <th>Пример</th>
+                                                        <th>Обязательно</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
+                                                    {% for param, properties in method.success.request.params %}
                                                     <tr>
-                                                        <td>X-API-KEY</td>
-                                                        <td>String</td>
-                                                        <td>Ключ клиента</td>
-                                                        <td>blizzard-entertainment</td>
+                                                        <td>{{ param | raw }}</td>
+                                                        <td>{{ properties.type | title }}</td>
+                                                        <td>{{ properties.description | raw }}</td>
+                                                        <td>{% if properties.isRequired %}Да{% else %}Нет{% endif%}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>X-API-CLIENT</td>
-                                                        <td>String</td>
-                                                        <td>Тип клиента</td>
-                                                        <td>desktop_site</td>
-                                                    </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>
+
+                                            <h4>Параметры ответа:</h4>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Название</th>
+                                                        <th>Тип</th>
+                                                        <th>Описание</th>
+                                                        <th>Nullable</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for param, properties in method.success.response.params %}
+                                                        <tr>
+                                                            <td>{{ param | raw }}</td>
+                                                            <td>{{ properties.type | title }}</td>
+                                                            <td>{{ properties.description | raw }}</td>
+                                                            <td>{% if properties.isNullable %}Да{% else %}Нет{% endif%}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
                                             <h4>Пример запроса:</h4>
-                                            <pre><code class="language-json">{{ method.success.request.example | raw }}</code></pre>
+                                            <pre><code class="language-json">{{ method.success.request.example | json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+
                                             <h4>Пример ответа:</h4>
-                                            <pre><code class="language-json">{{ method.success.response.example | raw }}</code></pre>
+                                            <pre><code class="language-json">{{ method.success.response.example | json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+
                                             <h4>Отправить запрос:</h4>
                                             <div id="jsoneditor-{{ extension | raw }}{{ name | raw }}" class="jsoneditor" data-jsoneditor-key="{{ extension | raw }}{{ name | raw }}">
-                                                {{ method.success.request.example | raw }}
+                                                {{ method.success.request.example | json_encode(constant('JSON_PRETTY_PRINT')) }}
                                             </div>
                                             <p></p>
                                             <a href="#" class="btn btn-cta btn-pink" id="send">Отправить</a>
@@ -180,7 +204,7 @@
                                 <li><a class="scrollto" href="#start">Начало</a></li>
                                 {% for extension, methods in docs %}
                                     <li>
-                                        <a class="scrollto" href="#{{ extension | raw }}">{{ extension | raw }}</a>
+                                        <a class="scrollto" href="#{{ extension | raw }}">{{ extension | title }}</a>
                                         <ul class="nav doc-sub-menu">
                                             {% for name, method  in methods %}
                                             <li><a class="scrollto" href="#{{ extension | raw }}{{ name | raw }}">{{ name | raw }}</a></li>

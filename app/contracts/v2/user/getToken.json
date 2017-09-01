@@ -1,5 +1,4 @@
 {
-  "method": "getToken",
   "title": "Получение токена",
   "description": "Метод для получения токена",
   "needAuth": false,
@@ -7,8 +6,17 @@
   "success": {
     "request": {
       "params": {
-        "phone": "required|string|phone",
-        "code": "required|string"
+        "phone": {
+          "type": "string",
+          "rules": ["phone"],
+          "isRequired": true,
+          "description": "Телефон пользователя"
+        },
+        "code": {
+          "type": "string",
+          "isRequired": true,
+          "description": "Пароль"
+        }
       },
       "example": {
         "phone": "79046473638",
@@ -17,10 +25,26 @@
     },
     "response": {
       "params": {
-        "access_token": "string",
-        "expires_in": "integer",
-        "token_type": "string",
-        "refresh_token": "string"
+        "access_token": {
+          "type": "string",
+          "isNullable": false,
+          "description": "Токен для отправки в HTTP-заголовке Authorization"
+        },
+        "expires_in": {
+          "type": "integer",
+          "isNullable": false,
+          "description": "Время жизни токена в секундах"
+        },
+        "token_type": {
+          "type": "string",
+          "isNullable": false,
+          "description": "Тип токена"
+        },
+        "refresh_token": {
+          "type": "string",
+          "isNullable": false,
+          "description": "Токен для обновления access-токена"
+        }
       },
       "example": {
         "access_token": "ad29cf10a40ec04dae0e4e5f4cab2772df1b4734",

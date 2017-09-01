@@ -1,5 +1,4 @@
 {
-  "method": "getToken",
   "title": "Получение токена",
   "description": "Метод для получения токена",
   "needAuth": false,
@@ -7,9 +6,23 @@
   "success": {
     "request": {
       "params": {
-        "username": "required|string|email",
-        "password": "required|string",
-        "clientId": "required|string"
+        "username": {
+          "type": "string",
+          "rules": ["email"],
+          "isRequired": true,
+          "description": "Email пользователя"
+        },
+        "password": {
+          "type": "string",
+          "isRequired": true,
+          "description": "Пароль"
+        },
+        "clientId": {
+          "type": "string",
+          "rules": ["enum:am-mobile-app,am-by-coockie"],
+          "isRequired": true,
+          "description": "Строковый идентификатор типа клиента"
+        }
       },
       "example": {
         "username": "kot_tdf@mail.ru",
@@ -19,10 +32,26 @@
     },
     "response": {
       "params": {
-        "access_token": "string",
-        "expires_in": "integer",
-        "token_type": "string",
-        "refresh_token": "string"
+        "access_token": {
+          "type": "string",
+          "isNullable": false,
+          "description": "Токен для отправки в HTTP-заголовке Authorization"
+        },
+        "expires_in": {
+          "type": "integer",
+          "isNullable": false,
+          "description": "Время жизни токена в секундах"
+        },
+        "token_type": {
+          "type": "string",
+          "isNullable": false,
+          "description": "Тип токена"
+        },
+        "refresh_token": {
+          "type": "string",
+          "isNullable": false,
+          "description": "Токен для обновления access-токена"
+        }
       },
       "example": {
         "access_token": "ad29cf10a40ec04dae0e4e5f4cab2772df1b4734",

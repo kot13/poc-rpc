@@ -35,19 +35,17 @@ final class HomeAction
                     $data = file_get_contents(self::CONTRACTS_PATH . '//' . $version . '//' . $extension . '//' . $contract);
                     $data = json_decode($data, true);
 
-                    $extension = ucfirst($extension);
-                    $contract  = ucfirst(str_replace(".json", "", $contract));
+                    $contract = str_replace(".json", "", $contract);
 
                     $methods[$version][$extension][$contract] = $data;
 
                     $ReqEx = $methods[$version][$extension][$contract]['success']['request']['example'];
                     $ReqEx = [
                         'jsonrpc' => '2.0',
-                        'method'  => strtolower($extension).'.'.strtolower($contract),
+                        'method'  => sprintf('%s.%s', $extension, $contract),
                         'params'  => $ReqEx,
                         'id'      => 1,
                     ];
-                    $ReqEx = json_encode($ReqEx);
 
                     $ResEx = $methods[$version][$extension][$contract]['success']['response']['example'];
                     $ResEx = [
@@ -55,7 +53,6 @@ final class HomeAction
                         'result'  => $ResEx,
                         'id'      => 1,
                     ];
-                    $ResEx = json_encode($ResEx);
 
                     $methods[$version][$extension][$contract]['success']['request']['example'] = $ReqEx;
                     $methods[$version][$extension][$contract]['success']['response']['example'] = $ResEx;
