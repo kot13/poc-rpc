@@ -12,6 +12,12 @@ $(document).ready(function() {
         };
 
         localStorage.setItem('settings', JSON.stringify(settings));
+    } else {
+        settings = JSON.parse(settings);
+
+        $('#x-api-key').val(settings['X-API-KEY']);
+        $('#x-api-client').val(settings['X-API-CLIENT']);
+        $('#authorization').val(settings['Authorization']);
     }
 
     var url = '/api/v1';
@@ -82,7 +88,6 @@ $(document).ready(function() {
         var $response = $('#response-' + editorId);
 
         var headers = localStorage.getItem('settings');
-
         if (headers) {
             headers = JSON.parse(headers);
         }
