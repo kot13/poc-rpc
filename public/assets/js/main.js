@@ -1,4 +1,19 @@
 $(document).ready(function() {
+    var settings = localStorage.getItem('settings');
+    if (!settings) {
+        var xApiKeyHeader = $('#x-api-key').val();
+        var xApiClientHeader = $('#x-api-client').val();
+        var authorizationHeader = $('#authorization').val();
+
+        settings = {
+            'X-API-KEY': xApiKeyHeader,
+            'X-API-CLIENT': xApiClientHeader,
+            'Authorization': authorizationHeader
+        };
+
+        localStorage.setItem('settings', JSON.stringify(settings));
+    }
+
     var url = '/api/v1';
     var jsonEditors = {};
 
@@ -26,6 +41,21 @@ $(document).ready(function() {
 		
 	});
 
+	/* Settings modal */
+	$('#save-settings').click(function(e){
+        var xApiKeyHeader = $('#x-api-key').val();
+        var xApiClientHeader = $('#x-api-client').val();
+        var authorizationHeader = $('#authorization').val();
+
+        var settings = {
+            'X-API-KEY': xApiKeyHeader,
+            'X-API-CLIENT': xApiClientHeader,
+            'Authorization': authorizationHeader
+        };
+
+        localStorage.setItem('settings', JSON.stringify(settings));
+    });
+
 	/* Json editors init */
     $('.jsoneditor').each(function(){
         var container = document.getElementById($(this).attr('id'));
@@ -51,9 +81,11 @@ $(document).ready(function() {
         var param = editor.get();
         var $response = $('#response-' + editorId);
 
-        var headers = {
+        var headers = localStorage.getItem('settings');
 
-        };
+        if (headers) {
+            headers = JSON.parse(headers);
+        }
 
         var ajaxRequest = {
             url: url,
