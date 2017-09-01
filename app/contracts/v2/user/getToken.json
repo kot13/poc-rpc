@@ -10,12 +10,12 @@
           "type": "string",
           "rules": ["phone"],
           "isRequired": true,
-          "description": "Телефон пользователя"
+          "description": "Телефон пользователя (89ххххххххх, 79ххххххххх, 9ххххххххх, +79ххххххххх, +7(999)999-99-99)"
         },
         "code": {
           "type": "string",
           "isRequired": true,
-          "description": "Пароль"
+          "description": "Код из SMS"
         }
       },
       "example": {

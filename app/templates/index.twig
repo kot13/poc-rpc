@@ -32,15 +32,21 @@
                             <span class="text-highlight">AM.RU</span><span class="text-bold">Docs</span>
                         </a>
                     </h1>
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-pink dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Версия {{ currentVersion | raw }} <span class="caret"></span>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-pink dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Версия {{ currentVersion | raw }} <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                {% for version in otherVersions %}
+                                    <li><a href="/?version={{ version | raw }}">Версия {{ version | raw }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#configModal">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            {% for version in otherVersions %}
-                                <li><a href="/?version={{ version | raw }}">Версия {{ version | raw }}</a></li>
-                            {% endfor %}
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -129,7 +135,7 @@
                                     <h2 class="section-title">{{ extension | raw }}</h2>
                                     {% for name, method  in methods %}
                                         <div id="{{ extension | raw }}{{ name | raw }}" class="section-block">
-                                            <h3 class="block-title">{{ name | raw }} - {{ method.title | raw }}</h3>
+                                            <h3 class="block-title"><span class="label label-danger">Need auth</span> {{ name | raw }} - {{ method.title | raw }}</h3>
                                             <p>{{ method.description | raw }}</p>
 
                                             <h4>Параметры запроса:</h4>
@@ -187,11 +193,15 @@
                                             <pre><code class="language-json">{{ method.success.response.example | json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
 
                                             <h4>Отправить запрос:</h4>
-                                            <div id="jsoneditor-{{ extension | raw }}{{ name | raw }}" class="jsoneditor" data-jsoneditor-key="{{ extension | raw }}{{ name | raw }}">
-                                                {{ method.success.request.example | json_encode(constant('JSON_PRETTY_PRINT')) }}
-                                            </div>
-                                            <p></p>
-                                            <a href="#" class="btn btn-cta btn-pink" id="send">Отправить</a>
+                                            <form data-editor-id="{{ extension | raw }}{{ name | raw }}" data-on="sample-request-form">
+                                                <div class="form-group">
+                                                    <div id="jsoneditor-{{ extension | raw }}{{ name | raw }}" class="jsoneditor" data-jsoneditor-key="{{ extension | raw }}{{ name | raw }}">
+                                                        {{ method.success.request.example | json_encode(constant('JSON_PRETTY_PRINT')) }}
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-cta btn-pink">Отправить</button>
+                                            </form>
+                                            <pre class="collapse" id="response-{{ extension | raw }}{{ name | raw }}"><code class="language-json"></code></pre>
                                         </div>
                                     {% endfor %}
                                 </section>
@@ -226,6 +236,38 @@
             <small class="copyright">Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers</small>
         </div>
     </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="configModal" tabindex="-1" role="dialog" aria-labelledby="configModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="configModalLabel">Настройки</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="x-api-key">X-API-KEY</label>
+                            <input type="text" class="form-control" id="x-api-key" value="blizzard-entertainment">
+                        </div>
+                        <div class="form-group">
+                            <label for="x-api-client">X-API-CLIENT</label>
+                            <input type="text" class="form-control" id="x-api-client" value="desktop_site">
+                        </div>
+                        <div class="form-group">
+                            <label for="authorization">Authorization</label>
+                            <input type="text" class="form-control" id="authorization" value="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script type="text/javascript" src="{{ base_url() }}/assets/plugins/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="{{ base_url() }}/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
