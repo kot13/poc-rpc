@@ -12,8 +12,23 @@ final class <?= $className ?> extends BaseAction
 foreach($methods as $name => $method) {
     echo "\t\t'".$name."' => [".PHP_EOL;
     echo "\t\t\t'params' => [".PHP_EOL;
-    foreach($method['params'] as $param => $value) {
-        echo "\t\t\t\t'".$param."' => '".$value."',".PHP_EOL;
+    foreach($method['params'] as $param => $properties) {
+        echo "\t\t\t\t'".$param."' => [".PHP_EOL;
+        echo "\t\t\t\t\t'type' => '".$properties['type']."',".PHP_EOL;
+
+        if (!isset($properties['isRequired'])) {
+            $properties['isRequired'] = false;
+        }
+        echo "\t\t\t\t\t'isRequired' => ".($properties['isRequired'] ? 'true,' : 'false,').PHP_EOL;
+
+        if (isset($properties['rules']) && is_array($properties['rules'])) {
+            echo "\t\t\t\t\t'rules' => [".PHP_EOL;
+            foreach ($properties['rules'] as $rule) {
+                echo "\t\t\t\t\t\t'".$rule."',".PHP_EOL;
+            }
+            echo "\t\t\t\t\t],".PHP_EOL;
+        }
+        echo "\t\t\t\t],".PHP_EOL;
     }
     echo "\t\t\t],".PHP_EOL;
     echo "\t\t\t'needAuth' => ".($method['needAuth'] ? 'true,' : 'false,').PHP_EOL;
