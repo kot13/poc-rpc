@@ -72,8 +72,12 @@ abstract class BaseAction
             //TODO: если указана стратегия кеширования, то применить
         }
 
-        $obj = new $method;
-        $result = $obj($params['params']);
+        try {
+            $reflectionMethod = new \ReflectionMethod($method, '__invoke');
+            $result           = $reflectionMethod->invokeArgs(new $method, $params['params']);
+        } catch (\Exception $e) {
+            throw new Exception(Server::INTERNAL_ERROR, $params['id'], $e->getMessage());
+        }
 
         $encode = $this->server->encodeSuccess($params['id'], $result);
         return $response->withJson($encode, 200);

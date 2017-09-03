@@ -4,10 +4,11 @@ namespace App\Handlers\V2\User;
 class GetToken
 {
     /**
-     * @param $params
+     * @param string $phone
+     * @param string $password
      * @return array
      */
-    public function __invoke($params)
+    public function __invoke(string $phone, string $password)
     {
         return [
             'access_token'  => 'ad29cf10a40ec04dae0e4e5f4cab2772df1b4734',
