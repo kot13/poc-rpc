@@ -33,11 +33,11 @@ class Validator
             $param = $rules[$field];
 
             if ($param['isRequired'] && is_null($value)) {
-                die('required');
+                $this->errors[$field][] = 'Value is required.';
             }
 
             if (gettype($value) !== $param['type'] && !is_null($value)) {
-                die('type');
+                $this->errors[$field][] = 'Value is not valid type.';
             }
 
             if (!in_array($param['type'], ['object', 'array'])) {
@@ -76,6 +76,19 @@ class Validator
     public function errors()
     {
         return $this->errors;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorString()
+    {
+        $err = '';
+        foreach ($this->errors as $field => $errors) {
+            $err .= '`'.$field.'` - '.implode(' ', $errors). ' ';
+        }
+
+        return $err;
     }
 
     /**

@@ -20,7 +20,6 @@ $(document).ready(function() {
         $('#authorization').val(settings['Authorization']);
     }
 
-    var url = '/api/v1';
     var jsonEditors = {};
 
 	$('#doc-menu').affix({
@@ -91,6 +90,8 @@ $(document).ready(function() {
         if (headers) {
             headers = JSON.parse(headers);
         }
+
+        var url = $('#api-url').val();
 
         var ajaxRequest = {
             url: url,

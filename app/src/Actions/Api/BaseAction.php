@@ -4,6 +4,8 @@ namespace App\Actions\Api;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Validator\Validator;
+use App\JsonRpc\Server;
+use App\JsonRpc\Exception;
 
 abstract class BaseAction
 {
@@ -18,13 +20,20 @@ abstract class BaseAction
     protected $validator;
 
     /**
+     * @var Server
+     */
+    protected $server;
+
+    /**
      * BaseAction constructor.
      *
      * @param Validator $validator
+     * @param Server $server
      */
-    public function __construct(Validator $validator)
+    public function __construct(Validator $validator, Server $server)
     {
         $this->validator = $validator;
+        $this->server    = $server;
     }
 
     /**
@@ -39,35 +48,34 @@ abstract class BaseAction
     {
         $params = $request->getParams();
 
-        // TODO: проверить RPC запрос
+        if (!$this->server->isValidRequest($params)) {
+            throw new Exception(Server::INVALID_REQUEST);
+        }
 
         $method = explode('.', $params['method']);
         $method = 'App\Handlers\\'.static::who().'\\'.ucfirst($method[0]).'\\'.ucfirst($method[1]);
 
         if (!isset(static::$methods[$method])) {
-            throw new \Exception('Ohohoh');
+            throw new Exception(Server::METHOD_NOT_FOUND, $params['id']);
         }
 
         $this->validator->validate($params['params'], static::$methods[$method]['params']);
         if (!$this->validator->passes()) {
-            throw new \Exception('Ahahah');
+            throw new Exception(Server::INVALID_PARAMS, $params['id'], $this->validator->getErrorString());
         }
 
         if (static::$methods[$method]['needAuth']) {
             // TODO: если необходима авторизация - проверить авторизованность
         }
 
-        //TODO: если указана стратегия кеширования, то применить
+        if (static::$methods[$method]['needCache']) {
+            //TODO: если указана стратегия кеширования, то применить
+        }
 
         $obj = new $method;
         $result = $obj($params['params']);
 
-        // TODO: отрендерить в JSON-RPC 2.0
-        return $response->withJson($result, 200);
-    }
-
-    static function who()
-    {
-        return 'V1';
+        $encode = $this->server->encodeSuccess($params['id'], $result);
+        return $response->withJson($encode, 200);
     }
 }

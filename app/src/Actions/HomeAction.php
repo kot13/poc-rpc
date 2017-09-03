@@ -64,6 +64,7 @@ final class HomeAction
             'docs'           => $methods[$currentVersion],
             'currentVersion' => $currentVersion,
             'otherVersions'  => array_diff($versions, [$currentVersion]),
+            'apiUrl'         => '/api/' . $currentVersion,
         ]);
 
         return $response;

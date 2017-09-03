@@ -30,8 +30,17 @@ foreach($methods as $name => $method) {
         echo "\t\t\t\t\t],".PHP_EOL;
         echo "\t\t\t\t],".PHP_EOL;
     }
+
     echo "\t\t\t],".PHP_EOL;
+    if (!isset($method['needAuth'])) {
+        $method['needAuth'] = false;
+    }
     echo "\t\t\t'needAuth' => ".($method['needAuth'] ? 'true,' : 'false,').PHP_EOL;
+
+    if (!isset($method['needCache'])) {
+        $method['needCache'] = false;
+    }
+    echo "\t\t\t'needCache' => ".($method['needCache'] ? 'true,' : 'false,').PHP_EOL;
     echo "\t\t],".PHP_EOL;
 };
 ?>

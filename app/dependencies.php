@@ -25,6 +25,12 @@ $container['validator'] = function($c) {
     return $validator;
 };
 
+$container['server'] = function($c) {
+    $server = new App\JsonRpc\Server();
+
+    return $server;
+};
+
 // -----------------------------------------------------------------------------
 // Service factories
 // -----------------------------------------------------------------------------
@@ -40,29 +46,27 @@ $container['logger'] = function($c) {
 };
 
 $container['errorHandler'] = function($c) {
-    return function ($request, $response, $exception) use ($c) {
-        return $c['response']->withStatus(500)
-            ->withHeader('Content-Type', 'text/html')
-            ->write('Something went wrong!');
+    return function ($request, $response, Exception $exception) use ($c) {
+        if ($exception instanceof App\JsonRpc\Exception) {
+            $encode = $exception->encodeError();
+        } else {
+            $details = $c['settings']['displayErrorDetails'] ? $exception->getMessage() : 'Internal server error';
+            $encode  = $c['server']->encodeError(App\JsonRpc\Server::INTERNAL_ERROR, null, $details);
+        }
+
+        return $c['response']->withJson($encode, 200);
     };
 };
 
 $container['notFoundHandler'] = function($c) {
     return function ($request, $response) use ($c) {
-        return $c['response']
-            ->withStatus(404)
-            ->withHeader('Content-Type', 'text/html')
-            ->write('Page not found');
+        throw new App\JsonRpc\Exception(App\JsonRpc\Server::METHOD_NOT_FOUND);
     };
 };
 
 $container['notAllowedHandler'] = function($c) {
     return function ($request, $response, $methods) use ($c) {
-        return $c['response']
-            ->withStatus(405)
-            ->withHeader('Allow', implode(', ', $methods))
-            ->withHeader('Content-type', 'text/html')
-            ->write('Method must be one of: ' . implode(', ', $methods));
+        throw new App\JsonRpc\Exception(App\JsonRpc\Server::METHOD_NOT_FOUND);
     };
 };
 
@@ -74,5 +78,9 @@ $container[App\Actions\HomeAction::class] = function($c) {
 };
 
 $container[App\Actions\Api\V1::class] = function($c) {
-    return new App\Actions\Api\V1($c->get('validator'));
+    return new App\Actions\Api\V1($c->get('validator'), $c->get('server'));
+};
+
+$container[App\Actions\Api\V2::class] = function($c) {
+    return new App\Actions\Api\V2($c->get('validator'), $c->get('server'));
 };

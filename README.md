@@ -21,3 +21,9 @@ $ php cli generate
 $ php -S 127.0.0.1:8888 -t ./public >/dev/null 2>&1 &
 $ open http://127.0.0.1:8888
 ```
+
+## Run with Docker
+```
+$ docker-compose up -d
+$ open http://localhost:8080
+```
