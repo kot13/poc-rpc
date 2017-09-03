@@ -3,15 +3,38 @@ namespace App\Actions\Api;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
+use App\Validator\Validator;
 
 abstract class BaseAction
 {
+    /**
+     * @var array
+     */
     protected static $methods = [];
 
-    public function __construct()
+    /**
+     * @var Validator
+     */
+    protected $validator;
+
+    /**
+     * BaseAction constructor.
+     *
+     * @param Validator $validator
+     */
+    public function __construct(Validator $validator)
     {
+        $this->validator = $validator;
     }
 
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param          $args
+     *
+     * @return Response
+     * @throws \Exception
+     */
     public function __invoke(Request $request, Response $response, $args)
     {
         $params = $request->getParams();
@@ -25,7 +48,10 @@ abstract class BaseAction
             throw new \Exception('Ohohoh');
         }
 
-        // TODO: отвалидировать параметры
+        $this->validator->validate($params['params'], static::$methods[$method]['params']);
+        if (!$this->validator->passes()) {
+            throw new \Exception('Ahahah');
+        }
 
         if (static::$methods[$method]['needAuth']) {
             // TODO: если необходима авторизация - проверить авторизованность
@@ -40,5 +66,8 @@ abstract class BaseAction
         return $response->withJson($result, 200);
     }
 
-    abstract static function who();
+    static function who()
+    {
+        return 'V1';
+    }
 }

@@ -19,5 +19,5 @@ $ php cli generate
 ## Run
 ```
 $ php -S 127.0.0.1:8888 -t ./public >/dev/null 2>&1 &
-$ open 127.0.0.1:8888
+$ open http://127.0.0.1:8888
 ```

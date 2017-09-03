@@ -8,13 +8,21 @@ $container = $app->getContainer();
 // -----------------------------------------------------------------------------
 
 // Twig
-$container['view'] = function ($c) {
+$container['view'] = function($c) {
     $settings = $c->get('settings');
     $view = new Slim\Views\Twig($settings['view']['template_path'], $settings['view']['twig']);
     // Add extensions
     $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $c->get('request')->getUri()));
     $view->addExtension(new Twig_Extension_Debug());
+
     return $view;
+};
+
+// Validator
+$container['validator'] = function($c) {
+    $validator = new App\Validator\Validator();
+
+    return $validator;
 };
 
 // -----------------------------------------------------------------------------
@@ -22,15 +30,16 @@ $container['view'] = function ($c) {
 // -----------------------------------------------------------------------------
 
 // monolog
-$container['logger'] = function ($c) {
+$container['logger'] = function($c) {
     $settings = $c->get('settings');
     $logger = new Monolog\Logger($settings['logger']['name']);
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['logger']['path'], Monolog\Logger::DEBUG));
+
     return $logger;
 };
 
-$container['errorHandler'] = function ($c) {
+$container['errorHandler'] = function($c) {
     return function ($request, $response, $exception) use ($c) {
         return $c['response']->withStatus(500)
             ->withHeader('Content-Type', 'text/html')
@@ -38,7 +47,7 @@ $container['errorHandler'] = function ($c) {
     };
 };
 
-$container['notFoundHandler'] = function ($c) {
+$container['notFoundHandler'] = function($c) {
     return function ($request, $response) use ($c) {
         return $c['response']
             ->withStatus(404)
@@ -47,7 +56,7 @@ $container['notFoundHandler'] = function ($c) {
     };
 };
 
-$container['notAllowedHandler'] = function ($c) {
+$container['notAllowedHandler'] = function($c) {
     return function ($request, $response, $methods) use ($c) {
         return $c['response']
             ->withStatus(405)
@@ -60,10 +69,10 @@ $container['notAllowedHandler'] = function ($c) {
 // -----------------------------------------------------------------------------
 // Action factories
 // -----------------------------------------------------------------------------
-$container[App\Actions\HomeAction::class] = function ($c) {
+$container[App\Actions\HomeAction::class] = function($c) {
     return new App\Actions\HomeAction($c->get('view'), $c->get('logger'));
 };
 
-$container[App\Actions\V1Action::class] = function ($c) {
-    return new App\Actions\V1Action();
+$container[App\Actions\Api\V1::class] = function($c) {
+    return new App\Actions\Api\V1($c->get('validator'));
 };

@@ -21,13 +21,13 @@ foreach($methods as $name => $method) {
         }
         echo "\t\t\t\t\t'isRequired' => ".($properties['isRequired'] ? 'true,' : 'false,').PHP_EOL;
 
+        echo "\t\t\t\t\t'rules' => [".PHP_EOL;
         if (isset($properties['rules']) && is_array($properties['rules'])) {
-            echo "\t\t\t\t\t'rules' => [".PHP_EOL;
             foreach ($properties['rules'] as $rule) {
                 echo "\t\t\t\t\t\t'".$rule."',".PHP_EOL;
             }
-            echo "\t\t\t\t\t],".PHP_EOL;
         }
+        echo "\t\t\t\t\t],".PHP_EOL;
         echo "\t\t\t\t],".PHP_EOL;
     }
     echo "\t\t\t],".PHP_EOL;
