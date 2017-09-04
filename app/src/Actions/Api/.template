@@ -12,7 +12,7 @@ final class <?= $className ?> extends BaseAction
 foreach($methods as $name => $method) {
     echo "\t\t'".$name."' => [".PHP_EOL;
     echo "\t\t\t'params' => [".PHP_EOL;
-    foreach($method['params'] as $param => $properties) {
+    foreach($method['success']['request']['params'] as $param => $properties) {
         echo "\t\t\t\t'".$param."' => [".PHP_EOL;
         echo "\t\t\t\t\t'type' => '".$properties['type']."',".PHP_EOL;
 

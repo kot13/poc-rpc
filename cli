@@ -7,21 +7,34 @@ include_once __DIR__ . '/vendor/autoload.php';
 class Cli
 {
     /**
-     * @var int exit code - all went well
+     * int exit code - all went well
      */
     const EXIT_CODE_OK = 0;
 
     /**
-     * @var int exit code - incorrect CLI arguments list
+     * int exit code - incorrect CLI arguments list
      */
     const EXIT_CODE_ARGS_LIST = 10;
 
     /**
-     * @var int exit code - some kind of file/DB access error
+     * int exit code - some kind of file/DB access error
      */
     const EXIT_CODE_ACCESS_ERROR = 11;
 
-    const ACTION_TEMPLATE = '';
+    /**
+     * Path to contracts dir
+     */
+    const CONTRACTS_PATH = __DIR__ . '/app/contracts';
+
+    /**
+     * Path to api actions
+     */
+    const API_ACTIONS_PATH = __DIR__ . '/app/src/Actions/Api';
+
+    /**
+     * Path to api template
+     */
+    const TEMPLATE_PATH = __DIR__ . '/app/src/Actions/Api/.template';
 
     /**
      * @var array copy of system's argv
@@ -55,6 +68,10 @@ class Cli
                 return $this->runGenerate();
                 break;
 
+            case 'runTests':
+                return $this->runTests();
+                break;
+
             case 'help':
             case '--help':
             default:
@@ -83,49 +100,28 @@ class Cli
      */
     private function runGenerate()
     {
-        $path          = __DIR__ . '/app/src/Actions/Api';
-        $templatePath  = $path . '/.template';
-        $contractsPath = __DIR__ . '/app/contracts';
-
-        if (!is_writeable($path)) {
-            echo 'The directory ' . $path . ' is not writable'.PHP_EOL;
+        if (!is_writeable(self::API_ACTIONS_PATH)) {
+            echo 'The directory ' . self::API_ACTIONS_PATH . ' is not writable'.PHP_EOL;
             return static::EXIT_CODE_ACCESS_ERROR;
         }
 
-        if (false === file_exists($templatePath)) {
-            echo 'The template file ' . $templatePath . ' not found'.PHP_EOL;
+        if (false === file_exists(self::TEMPLATE_PATH)) {
+            echo 'The template file ' . self::TEMPLATE_PATH . ' not found'.PHP_EOL;
             return static::EXIT_CODE_ACCESS_ERROR;
         };
 
         // Scan
-        $versions = array_diff(scandir($contractsPath), ['..', '.']);
-        foreach ($versions as $version) {
-            $extensions = array_diff(scandir($contractsPath.'//'.$version), ['..', '.']);
+        $path  = self::CONTRACTS_PATH;
+        $scans = $this->scanContracts($path);
+        foreach ($scans as $version => $methods) {
             $className  = strtoupper($version);
             $baseName   = $className . '.php';
 
-            $methods = [];
-            foreach ($extensions as $extension) {
-                $contracts = array_diff(scandir($contractsPath.'//'.$version.'//'.$extension), ['..', '.']);
-
-                foreach ($contracts as $contract) {
-                    $data = file_get_contents($contractsPath . '//' . $version . '//' . $extension . '//' . $contract);
-                    $data = json_decode($data, true);
-
-                    $methodName = 'App\Handlers\\'.$className.'\\'.ucfirst($extension).'\\'.ucfirst(str_replace(".json", "", $contract));
-
-                    $methods[$methodName] = [
-                        'params'   => $data['success']['request']['params'],
-                        'needAuth' => $data['needAuth'],
-                    ];
-                }
-            }
-
             ob_start();
-            include($templatePath);
+            include(self::TEMPLATE_PATH);
             $contents = ob_get_clean();
 
-            if (false === file_put_contents($path . '/' . $baseName, $contents)) {
+            if (false === file_put_contents(self::API_ACTIONS_PATH . '/' . $baseName, $contents)) {
                 echo 'The file ' . $baseName . ' could not be written to'.PHP_EOL;
                 return static::EXIT_CODE_ACCESS_ERROR;
             };
@@ -133,6 +129,53 @@ class Cli
 
         echo "Generate completed".PHP_EOL;
         return static::EXIT_CODE_OK;
+    }
+
+    private function runTests()
+    {
+        $path  = self::CONTRACTS_PATH;
+        $scans = $this->scanContracts($path);
+        foreach ($scans as $version => $methods) {
+            foreach ($methods as $method => $properties) {
+                // TODO: написать запуск тестов
+                echo 'Successful `'.$properties['contractPath'].'` contract testing'.PHP_EOL;
+            }
+        }
+
+        echo "Testing complete".PHP_EOL;
+        return static::EXIT_CODE_OK;
+    }
+
+    /**
+     * @param string $path
+     * @return array
+     */
+    private function scanContracts($path)
+    {
+        $scans = [];
+
+        $versions = array_diff(scandir($path), ['..', '.']);
+        foreach ($versions as $version) {
+            $extensions = array_diff(scandir($path . '/' . $version), ['..', '.']);
+
+            foreach ($extensions as $extension) {
+                $contracts = array_diff(scandir($path . '/' . $version . '/' . $extension), ['..', '.']);
+
+                foreach ($contracts as $contract) {
+                    $contractPath = $path . '/' . $version . '/' . $extension . '/' . $contract;
+                    $data         = file_get_contents($contractPath);
+                    $data         = json_decode($data, true);
+
+                    $methodName = 'App\Handlers\\'.ucfirst($version).'\\'.ucfirst($extension).'\\'.ucfirst(str_replace(".json", "", $contract));
+
+                    $data['contractPath'] = $contractPath;
+
+                    $scans[$version][$methodName] = $data;
+                }
+            }
+        }
+
+        return $scans;
     }
 }
 
