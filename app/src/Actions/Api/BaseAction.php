@@ -1,11 +1,13 @@
 <?php
 namespace App\Actions\Api;
 
+use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Validator\Validator;
 use App\JsonRpc\Server;
 use App\JsonRpc\Exception;
+use \GuzzleHttp\Client;
 
 abstract class BaseAction
 {
@@ -25,15 +27,26 @@ abstract class BaseAction
     protected $server;
 
     /**
+     * @var Client
+     */
+    protected $amruApi;
+
+    /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * BaseAction constructor.
      *
-     * @param Validator $validator
-     * @param Server $server
+     * @param Container $c
      */
-    public function __construct(Validator $validator, Server $server)
+    public function __construct(Container $c)
     {
-        $this->validator = $validator;
-        $this->server    = $server;
+        $this->container = $c;
+        $this->validator = $c->get('validator');
+        $this->server    = $c->get('server');
+        $this->amruApi   = $c->get('amru-api');
     }
 
     /**
@@ -74,7 +87,9 @@ abstract class BaseAction
 
         try {
             $reflectionMethod = new \ReflectionMethod($method, '__invoke');
-            $result           = $reflectionMethod->invokeArgs(new $method, $params['params']);
+            $result           = $reflectionMethod->invokeArgs(new $method($this->container), $params['params']);
+        } catch (Exception $e) {
+            throw new Exception($e->getCode(), $params['id'], $e->getMessage());
         } catch (\Exception $e) {
             throw new Exception(Server::INTERNAL_ERROR, $params['id'], $e->getMessage());
         }

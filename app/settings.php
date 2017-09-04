@@ -20,5 +20,7 @@ return [
             'name' => 'app',
             'path' => __DIR__ . '/../log/app.log',
         ],
+
+        'params' => require(__DIR__.'/../config/params.php'),
     ],
 ];

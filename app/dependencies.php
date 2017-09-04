@@ -31,6 +31,13 @@ $container['server'] = function($c) {
     return $server;
 };
 
+$container['amru-api'] = function($c) {
+    $settings = $c->get('settings');
+    $client   = new \GuzzleHttp\Client($settings['params']['amru-api']);
+
+    return $client;
+};
+
 // -----------------------------------------------------------------------------
 // Service factories
 // -----------------------------------------------------------------------------
@@ -78,9 +85,9 @@ $container[App\Actions\HomeAction::class] = function($c) {
 };
 
 $container[App\Actions\Api\V1::class] = function($c) {
-    return new App\Actions\Api\V1($c->get('validator'), $c->get('server'));
+    return new App\Actions\Api\V1($c);
 };
 
 $container[App\Actions\Api\V2::class] = function($c) {
-    return new App\Actions\Api\V2($c->get('validator'), $c->get('server'));
+    return new App\Actions\Api\V2($c);
 };

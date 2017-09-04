@@ -34,14 +34,20 @@ class Server
     const INTERNAL_ERROR = -32603;
 
     /**
+     * Error code - wrong credentials
+     */
+    const WRONG_CREDENTIALS = -32401;
+
+    /**
      * Error messages
      */
     const ERROR_MESSAGES = [
-        self::PARSE_ERROR      => 'Parse error',
-        self::INVALID_REQUEST  => 'Invalid Request',
-        self::METHOD_NOT_FOUND => 'Method not found',
-        self::INVALID_PARAMS   => 'Invalid params',
-        self::INTERNAL_ERROR   => 'Internal error',
+        self::PARSE_ERROR       => 'Parse error',
+        self::INVALID_REQUEST   => 'Invalid Request',
+        self::METHOD_NOT_FOUND  => 'Method not found',
+        self::INVALID_PARAMS    => 'Invalid params',
+        self::INTERNAL_ERROR    => 'Internal error',
+        self::WRONG_CREDENTIALS => 'Wrong credentials',
     ];
 
     /**
@@ -90,15 +96,20 @@ class Server
      */
     public static function encodeError($code, $id = null, $data = null)
     {
-        return [
+        $result = [
             'jsonrpc' => '2.0',
             'id'      => $id,
             'error'   => [
                 'code'    => $code,
                 'message' => self::getErrorMessage($code),
-                'data'    => $data,
             ],
         ];
+
+        if (!is_null($data) && !empty($data)) {
+            $result['error']['data'] = $data;
+        }
+
+        return $result;
     }
 
     /**
@@ -108,7 +119,7 @@ class Server
      */
     private static function getErrorMessage($code)
     {
-        $message = self::ERROR_MESSAGES[$code];// ?? self::ERROR_MESSAGES[self::INTERNAL_ERROR];
+        $message = self::ERROR_MESSAGES[$code] ?? self::ERROR_MESSAGES[self::INTERNAL_ERROR];
 
         return $message;
     }

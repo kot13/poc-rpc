@@ -135,7 +135,7 @@
                                     <h2 class="section-title">{{ extension | raw }}</h2>
                                     {% for name, method  in methods %}
                                         <div id="{{ extension | raw }}{{ name | raw }}" class="section-block">
-                                            <h3 class="block-title"><span class="label label-danger">Need auth</span> {{ name | raw }} - {{ method.title | raw }}</h3>
+                                            <h3 class="block-title">{% if method.needAuth %}<span class="label label-danger">Need auth</span> {% endif %}{{ name | raw }} - {{ method.title | raw }}</h3>
                                             <p>{{ method.description | raw }}</p>
 
                                             <h4>Параметры запроса:</h4>

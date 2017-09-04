@@ -1,8 +1,25 @@
 <?php
 namespace App\Handlers\V2\User;
 
+use GuzzleHttp\Client;
+use Slim\Container;
+
 class GetToken
 {
+    /**
+     * @var Client
+     */
+    private $amruApi;
+
+    /**
+     * GetToken constructor.
+     * @param Container $c
+     */
+    public function __construct(Container $c)
+    {
+        $this->amruApi = $c->get('amru-api');
+    }
+
     /**
      * @param string $phone
      * @param string $password
