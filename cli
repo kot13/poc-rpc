@@ -7,6 +7,11 @@ include_once __DIR__ . '/vendor/autoload.php';
 class Cli
 {
     /**
+     * Current contract version
+     */
+    const CONTRACT_VERSION = 1;
+
+    /**
      * int exit code - all went well
      */
     const EXIT_CODE_OK = 0;
@@ -165,6 +170,10 @@ class Cli
                     $contractPath = $path . '/' . $version . '/' . $extension . '/' . $contract;
                     $data         = file_get_contents($contractPath);
                     $data         = json_decode($data, true);
+
+                    if ($data['contract_version'] != self::CONTRACT_VERSION) {
+                        continue;
+                    }
 
                     $methodName = 'App\Handlers\\'.ucfirst($version).'\\'.ucfirst($extension).'\\'.ucfirst(str_replace(".json", "", $contract));
 

@@ -7,7 +7,6 @@ use Slim\Http\Response;
 use App\Validator\Validator;
 use App\JsonRpc\Server;
 use App\JsonRpc\Exception;
-use \GuzzleHttp\Client;
 
 abstract class BaseAction
 {
@@ -27,11 +26,6 @@ abstract class BaseAction
     protected $server;
 
     /**
-     * @var Client
-     */
-    protected $amruApi;
-
-    /**
      * @var Container
      */
     protected $container;
@@ -46,7 +40,6 @@ abstract class BaseAction
         $this->container = $c;
         $this->validator = $c->get('validator');
         $this->server    = $c->get('server');
-        $this->amruApi   = $c->get('amru-api');
     }
 
     /**

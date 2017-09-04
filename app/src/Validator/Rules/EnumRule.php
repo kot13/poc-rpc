@@ -20,6 +20,6 @@ class EnumRule implements IRule
      */
     public function error()
     {
-        return 'Value must be a valid email address.';
+        return 'Value must be a valid enum.';
     }
 }
