@@ -1265,3 +1265,8 @@ select {
 /* Small devices (tablets, 768px and up) */
 /* Medium devices (desktops, 992px and up) */
 /* Large devices (large desktops, 1200px and up) */
+
+pre code {
+  max-height: 500px;
+  overflow: auto;
+}

@@ -22,49 +22,85 @@ final class HomeAction
     public function __invoke(Request $request, Response $response, $args)
     {
         $methods        = [];
+        $entities       = [];
         $versions       = array_diff(scandir(self::CONTRACTS_PATH), ['..', '.']);
         $default        = current($versions);
         $currentVersion = $request->getParam('version', $default);
-        foreach ($versions as $version) {
-            $extensions = array_diff(scandir(self::CONTRACTS_PATH . '//' . $version), ['..', '.']);
 
-            foreach ($extensions as $extension) {
-                $contracts = array_diff(scandir(self::CONTRACTS_PATH . '//' . $version . '//' . $extension), ['..', '.']);
+        // Scan entities
+        $entityFiles = array_diff(scandir(self::CONTRACTS_PATH . '/' . $currentVersion . '/_entities'), ['..', '.']);
+        foreach ($entityFiles as $entity) {
+            $data = file_get_contents(self::CONTRACTS_PATH . '/' . $currentVersion . '/_entities/' . $entity);
+            $data = json_decode($data, true);
 
-                foreach ($contracts as $contract) {
-                    $data = file_get_contents(self::CONTRACTS_PATH . '//' . $version . '//' . $extension . '//' . $contract);
-                    $data = json_decode($data, true);
+            $entity = str_replace(".json", "", $entity);
 
-                    $contract = str_replace(".json", "", $contract);
+            $data['example'] = [
+                'jsonrpc' => '2.0',
+                'result' => $data['example'],
+                'id' => 1,
+            ];
 
-                    $methods[$version][$extension][$contract] = $data;
+            $entities[$entity] = $data;
+        }
 
-                    $ReqEx = $methods[$version][$extension][$contract]['success']['request']['example'];
-                    $ReqEx = [
+        //Scan endpoints
+        $extensions = array_diff(scandir(self::CONTRACTS_PATH . '/' . $currentVersion), ['..', '.', '_entities']);
+        foreach ($extensions as $extension) {
+            $contracts = array_diff(scandir(self::CONTRACTS_PATH . '/' . $currentVersion . '/' . $extension), ['..', '.']);
+            foreach ($contracts as $contract) {
+                $data = file_get_contents(self::CONTRACTS_PATH . '/' . $currentVersion . '/' . $extension . '/' . $contract);
+                $data = json_decode($data, true);
+
+                $contract = str_replace(".json", "", $contract);
+
+                $methods[$extension][$contract] = $data;
+
+                if (isset($methods[$extension][$contract]['success']['request']['example'])) {
+                    $reqExample = [
                         'jsonrpc' => '2.0',
-                        'method'  => sprintf('%s.%s', $extension, $contract),
-                        'params'  => $ReqEx,
-                        'id'      => 1,
+                        'method' => sprintf('%s.%s', $extension, $contract),
+                        'params' => $methods[$extension][$contract]['success']['request']['example'],
+                        'id' => 1,
                     ];
 
-                    $ResEx = $methods[$version][$extension][$contract]['success']['response']['example'];
-                    $ResEx = [
+                    $methods[$extension][$contract]['success']['request']['example'] = $reqExample;
+                } elseif (isset($methods[$extension][$contract]['success']['request'])) {
+                    $entityName = str_replace(".json", "", $methods[$extension][$contract]['success']['request']);
+                    if (isset($entities[$entityName])) {
+                        $methods[$extension][$contract]['success']['request'] = [
+                            'params' => $entities[$entityName]['params'] ?? [],
+                            'example'=> $entities[$entityName]['example'] ?? [],
+                        ];
+                    }
+                }
+
+                if (isset($methods[$extension][$contract]['success']['response']['example'])) {
+                    $resExample = [
                         'jsonrpc' => '2.0',
-                        'result'  => $ResEx,
-                        'id'      => 1,
+                        'result' => $methods[$extension][$contract]['success']['response']['example'],
+                        'id' => 1,
                     ];
 
-                    $methods[$version][$extension][$contract]['success']['request']['example'] = $ReqEx;
-                    $methods[$version][$extension][$contract]['success']['response']['example'] = $ResEx;
+                    $methods[$extension][$contract]['success']['response']['example'] = $resExample;
+                } elseif (isset($methods[$extension][$contract]['success']['response'])) {
+                    $entityName = str_replace(".json", "", $methods[$extension][$contract]['success']['response']);
+                    if (isset($entities[$entityName])) {
+                        $methods[$extension][$contract]['success']['response'] = [
+                            'params' => $entities[$entityName]['params'] ?? [],
+                            'example'=> $entities[$entityName]['example'] ?? [],
+                        ];
+                    }
                 }
             }
         }
 
         $this->view->render($response, 'index.twig', [
-            'docs'           => $methods[$currentVersion],
+            'docs'           => $methods,
             'currentVersion' => $currentVersion,
             'otherVersions'  => array_diff($versions, [$currentVersion]),
             'apiUrl'         => '/api/' . $currentVersion,
+            'entities'       => $entities,
         ]);
 
         return $response;

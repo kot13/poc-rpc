@@ -206,6 +206,42 @@
                                     {% endfor %}
                                 </section>
                             {% endfor %}
+                            <section id="entities" class="doc-section">
+                                <h2 class="section-title">Модели</h2>
+                                {% for name, entity  in entities %}
+                                    <div id="entity-{{ name | raw }}" class="section-block">
+                                        <h3 class="block-title">{{ name | raw }} - {{ entity.title | raw }}</h3>
+                                        <p>{{ entity.description | raw }}</p>
+
+                                        <h4>Параметры:</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th>Название</th>
+                                                    <th>Тип</th>
+                                                    <th>Описание</th>
+                                                    <th>Обязательно</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for param, properties in entity.params %}
+                                                    <tr>
+                                                        <td>{{ param | raw }}</td>
+                                                        <td>{{ properties.type | title }}</td>
+                                                        <td>{{ properties.description | raw }}</td>
+                                                        <td>{% if properties.isRequired %}Да{% else %}Нет{% endif%}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <h4>Пример запроса:</h4>
+                                        <pre><code class="language-json">{{ entity.example | json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+                                    </div>
+                                {% endfor %}
+                            </section>
                         </div>
                     </div>
                     <div class="doc-sidebar">
@@ -222,6 +258,14 @@
                                         </ul>
                                     </li>
                                 {% endfor %}
+                                <li>
+                                    <a class="scrollto" href="#entities">Модели</a>
+                                    <ul class="nav doc-sub-menu">
+                                        {% for name, entity  in entities %}
+                                            <li><a class="scrollto" href="#entity-{{ name | raw }}">{{ name | raw }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
                             </ul>
                         </nav>
                     </div>

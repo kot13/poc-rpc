@@ -1,0 +1,376 @@
+{
+  "contract_version": 1,
+  "title": "Объявление",
+  "description": "Объявление",
+  "params": {
+    "id": {
+      "type": "string",
+      "rules": ["hex"],
+      "description": "Id объявления",
+      "isNullabled": false
+    }
+  },
+  "example": {
+    "id": "56138e639f4afb03",
+    "link": "https://orenburg.am.ru/used/audi/a7/prv--56138e639f4afb03/",
+    "brand": "Audi",
+    "brandId": 1,
+    "model": "A7",
+    "modelId": 66,
+    "generation": "4G",
+    "generationId": 3170,
+    "modification": "3.0 TDI S tronic quattro (245 л. с.)",
+    "pseudoModel": "",
+    "year": "2011",
+    "prices": {
+      "EUR": 22553,
+      "USD": 26825,
+      "RUR": 1550000
+    },
+    "transmission": "Робот",
+    "condition": "отличное",
+    "mileage": "103000",
+    "engineVol": "3",
+    "engineType": "Дизель",
+    "enginePower": "245",
+    "driveType": "Полный",
+    "bodyType": "Лифтбэк",
+    "wheel": "Левый",
+    "country": "",
+    "warranty": false,
+    "cleared": true,
+    "views": "25",
+    "todayViews": "3",
+    "color": "серебряный",
+    "colorCode": "c0c0c0",
+    "colorEffect": "",
+    "doorsNum": "5",
+    "photos": [
+      {
+        "xl": "https://static.am/automobile_m3/document/xl/6/ba/6ba647dc53a2d02c01d3cf1e92de0f7d.jpg",
+        "l": "https://static.am/automobile_m3/document/l/6/ba/6ba647dc53a2d02c01d3cf1e92de0f7d.jpg",
+        "m": "https://static.am/automobile_m3/document/m/6/ba/6ba647dc53a2d02c01d3cf1e92de0f7d.jpg",
+        "s": "https://static.am/automobile_m3/document/s/6/ba/6ba647dc53a2d02c01d3cf1e92de0f7d.jpg",
+        "xs": "https://static.am/automobile_m3/document/xs/6/ba/6ba647dc53a2d02c01d3cf1e92de0f7d.jpg",
+        "original": "https://static.am/automobile_m3/document/original/6/ba/6ba647dc53a2d02c01d3cf1e92de0f7d.jpg",
+        "r": "https://static.am/automobile_m3/document/r/6/ba/6ba647dc53a2d02c01d3cf1e92de0f7d.jpg",
+        "isCatalog": false
+      }
+    ],
+    "city": "Оренбург",
+    "vip": true,
+    "seller": "individual",
+    "dealerIsOfficial": false,
+    "up": true,
+    "haggle": false,
+    "date": "21.08.2017 12:28",
+    "new": "0",
+    "actualizationDate": "05.09.2017 11:26",
+    "createdAt": "21.08.2017 12:28",
+    "phones": "+7 (922) 555-88-99",
+    "owners": "3",
+    "options": [
+      {
+        "title": "Комфорт",
+        "key": "comfort",
+        "elements": [
+          {
+            "title": "Климат-контроль",
+            "data": true,
+            "key": "climate"
+          }
+        ]
+      },
+      {
+        "title": "Экстерьер и салон",
+        "key": "exteriorAndInterior",
+        "elements": [
+          {
+            "title": "Зимние шины",
+            "data": true,
+            "key": "advertWinterTires"
+          },
+          {
+            "title": "Фары",
+            "data": "светодиодные",
+            "key": "lightType"
+          },
+          {
+            "title": "Обивка салона",
+            "data": "кожа",
+            "key": "salon"
+          }
+        ]
+      }
+    ],
+    "contacts": {
+      "seller": "Виталий",
+      "phones": [
+        {
+          "phone": "+7 (922) 555-88-99",
+          "time": null,
+          "ext": null
+        }
+      ],
+      "city": "Оренбург",
+      "address": "Дзержинский район",
+      "anonymous": false,
+      "page": null
+    },
+    "techStruct": [
+      {
+        "title": "Эксплуатационные показатели",
+        "elements": [
+          {
+            "title": "Расход топлива в городе",
+            "data": "7.2 л на 100 км",
+            "value": "72000",
+            "key": "cityFuelRate"
+          },
+          {
+            "title": "Расход топлива на шоссе",
+            "data": "5.3 л на 100 км",
+            "value": "53000",
+            "key": "roadFuelRate"
+          },
+          {
+            "title": "Расход топлива в смешанном цикле",
+            "data": "6 л на 100 км",
+            "value": "60000",
+            "key": "fuelConsumptionCycle"
+          },
+          {
+            "title": "Объём топливного бака",
+            "data": "75 л",
+            "value": "750000",
+            "key": "fuelTankVol"
+          },
+          {
+            "title": "Запас хода",
+            "data": "от 1 040 до 1 420 км",
+            "value": "10400000|14200000",
+            "key": "powerReserve"
+          },
+          {
+            "title": "Рекомендуемое топливо",
+            "data": "ДТ",
+            "value": "3",
+            "key": "carFuel"
+          },
+          {
+            "title": "Экологический стандарт",
+            "data": "EURO V",
+            "value": "2",
+            "key": "ecoStandard"
+          },
+          {
+            "title": "Максимальная скорость",
+            "data": "250 км/ч",
+            "value": "2500000",
+            "key": "maxSpeed"
+          },
+          {
+            "title": "Время разгона до 100 км/ч",
+            "data": "6.5 сек",
+            "value": "65000",
+            "key": "accelerationTime"
+          }
+        ],
+        "key": "operationalParameters"
+      },
+      {
+        "title": "Двигатель",
+        "elements": [
+          {
+            "title": "Объём двигателя",
+            "data": "2 967 см3",
+            "value": "29670000",
+            "key": "engineVol"
+          },
+          {
+            "title": "Мощность двигателя",
+            "data": "245 л.с.",
+            "value": "245",
+            "key": "enginePower"
+          },
+          {
+            "title": "Обороты максимальной мощности",
+            "data": " до 4 500 об/мин",
+            "value": "4500",
+            "key": "turnsNumber"
+          },
+          {
+            "title": "Максимальный крутящий момент",
+            "data": "500 Н*м",
+            "value": "5000000",
+            "key": "turnMoment"
+          },
+          {
+            "title": "Обороты максимального крутящего момента",
+            "data": " до 3 250 об/мин",
+            "value": "3250",
+            "key": "turnsTurnMoment"
+          },
+          {
+            "title": "Тип двигателя",
+            "data": "Дизельный",
+            "value": "2",
+            "key": "engineType"
+          },
+          {
+            "title": "Конфигурация двигателя",
+            "data": "V-образный",
+            "value": "4",
+            "key": "cylindersLayout"
+          },
+          {
+            "title": "Тип наддува",
+            "data": "Турбо",
+            "value": "1",
+            "key": "engineSuperchargedType"
+          },
+          {
+            "title": "Наличие интеркулера",
+            "data": "Нет",
+            "value": "",
+            "key": "interCooler"
+          },
+          {
+            "title": "Количество цилиндров",
+            "data": "6",
+            "value": "6",
+            "key": "cylinders"
+          },
+          {
+            "title": "Количество клапанов на цилиндр",
+            "data": "4",
+            "value": "4",
+            "key": "cylindersValves"
+          }
+        ],
+        "key": "engine"
+      },
+      {
+        "title": "Трансмиссия и управление",
+        "elements": [
+          {
+            "title": "Коробка передач",
+            "data": "Робот, 7 ст.",
+            "value": "3",
+            "key": "gearType"
+          },
+          {
+            "title": "Привод",
+            "data": "Полный",
+            "value": "5",
+            "key": "driveType"
+          },
+          {
+            "title": "Диаметр разворота",
+            "data": "11.9 м",
+            "value": "119000",
+            "key": "turningDiameter"
+          }
+        ],
+        "key": "transmissionAndControl"
+      },
+      {
+        "title": "Кузов",
+        "elements": [
+          {
+            "title": "Количество мест",
+            "data": "5",
+            "value": "5",
+            "key": "seatsCount"
+          },
+          {
+            "title": "Длина x Ширина x Высота",
+            "data": "4 969 x 1 911 x 1 420 мм",
+            "value": "49690000|19110000|14200000",
+            "key": "bodySizes"
+          },
+          {
+            "title": "Колея передних/задних колёс",
+            "data": "1 644 мм",
+            "value": "16440000",
+            "key": "carTrack"
+          },
+          {
+            "title": "Снаряженная масса",
+            "data": "1 845 кг",
+            "value": "18450000",
+            "key": "unladenmass"
+          },
+          {
+            "title": "Допустимая полная масса",
+            "data": "2 320 кг",
+            "value": "23200000",
+            "key": "allowAbleFullMass"
+          },
+          {
+            "title": "Грузоподъёмность",
+            "data": "475 кг",
+            "value": "4750000",
+            "key": "payLoad"
+          },
+          {
+            "title": "Объём багажника",
+            "data": "от 535 до 1 390 л",
+            "value": "535",
+            "key": "baggageVol"
+          }
+        ],
+        "key": "carBody"
+      },
+      {
+        "title": "Подвеска и тормоза",
+        "elements": [
+          {
+            "title": "Передняя подвеска",
+            "data": "Независимая, Многорычажная",
+            "value": "4|35",
+            "key": "frontSuspension"
+          },
+          {
+            "title": "Задняя подвеска",
+            "data": "Независимая, Многорычажная",
+            "value": "4|47",
+            "key": "rearSuspension"
+          },
+          {
+            "title": "Передние тормоза",
+            "data": "Дисковые вентилируемые",
+            "value": "7",
+            "key": "frontBrake"
+          },
+          {
+            "title": "Задние тормоза",
+            "data": "Дисковые вентилируемые",
+            "value": "2",
+            "key": "rearBrake"
+          }
+        ],
+        "key": "suspensionAndBrakes"
+      }
+    ],
+    "faults": [],
+    "impressions": 25,
+    "description": "Автомобиль в отличном состоянии, вложений не требует. Доводчики дверей, автоматический дальний свет, регулируемая пневмоподвеска, светодиодные фары, полный привод. Торг.",
+    "status": null,
+    "statusId": 1,
+    "hasVideo": false,
+    "isCrashed": false,
+    "isCustom": true,
+    "isSubNew": false,
+    "videos": [],
+    "isPaidPub": false,
+    "paidPubEndDate": null,
+    "paidPubDays": null,
+    "pubEndDate": "04.11.2017 8:28",
+    "kladdrId": "2412",
+    "commentsEnabled": true,
+    "siteUserId": "2529866",
+    "has3d": false,
+    "certificateId": null
+  }
+}

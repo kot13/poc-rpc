@@ -1,0 +1,25 @@
+{
+  "contract_version": 1,
+  "title": "Получение объявления по Id",
+  "description": "Метод для получения объявления по Id",
+  "needAuth": false,
+  "needCache": false,
+  "success": {
+    "request": {
+      "params": {
+        "advertId": {
+          "type": "string",
+          "isRequired": true,
+          "rules": ["hex"],
+          "description": "Id объявления (HEX)"
+        }
+      },
+      "example": {
+        "advertId": "56138e639f4afb03"
+      }
+    },
+    "response": "advert.json"
+  },
+  "testSuites": [
+  ]
+}
