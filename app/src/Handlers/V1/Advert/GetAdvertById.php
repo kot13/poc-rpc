@@ -48,12 +48,10 @@ class GetAdvertById
         $content = $res->getBody()->getContents();
         $content = json_decode($content, true);
 
-        print_r($content);die();
+        if (!isset($content['result']['advert']) || count($content['result']['advert']) == 0) {
+            throw new Exception(Server::RESOURCE_NOT_FOUND);
+        }
 
-//        if (!isset($content['result']) || isset($content['result']['error'])) {
-//            throw new Exception(Server::WRONG_CREDENTIALS);
-//        }
-
-        return $content['result'];
+        return $content['result']['advert'];
     }
 }

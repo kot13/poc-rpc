@@ -39,15 +39,27 @@ class Server
     const WRONG_CREDENTIALS = -32401;
 
     /**
+     * Error code - access denied
+     */
+    const ACCESS_DENIED = -32403;
+
+    /**
+     * Error code - resource not found
+     */
+    const RESOURCE_NOT_FOUND = -32404;
+
+    /**
      * Error messages
      */
     const ERROR_MESSAGES = [
-        self::PARSE_ERROR       => 'Parse error',
-        self::INVALID_REQUEST   => 'Invalid Request',
-        self::METHOD_NOT_FOUND  => 'Method not found',
-        self::INVALID_PARAMS    => 'Invalid params',
-        self::INTERNAL_ERROR    => 'Internal error',
-        self::WRONG_CREDENTIALS => 'Wrong credentials',
+        self::PARSE_ERROR        => 'Parse error',
+        self::INVALID_REQUEST    => 'Invalid Request',
+        self::METHOD_NOT_FOUND   => 'Method not found',
+        self::INVALID_PARAMS     => 'Invalid params',
+        self::INTERNAL_ERROR     => 'Internal error',
+        self::WRONG_CREDENTIALS  => 'Wrong credentials',
+        self::ACCESS_DENIED      => 'Access denied',
+        self::RESOURCE_NOT_FOUND => 'Resource not found',
     ];
 
     /**
